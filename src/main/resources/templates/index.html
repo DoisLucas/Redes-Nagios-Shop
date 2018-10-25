@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>BroadShop</title>
+
+    <link href="../css/style.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+
+</head>
+
+<body>
+
+<!-- Barra Nav -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">BroadShop</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Inicio
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Carrinho</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contatos</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Conteudo da pagina -->
+<div class="container">
+
+    <!-- Produto Principal -->
+    <header class="jumbotron my-4">
+        <div class="container">
+        <h1 class="display-3 text-principal" th:text="${principal.getNome()}"> A Warm Welcome!</h1>
+        <p class="lead" th:text="${principal.getDescricao()}">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo
+            aspernatur vitae fugiat numquam repellat.</p>
+        <a href="#" class="btn btn-dark btn-lg">Ver detalhes</a>
+        </div>
+    </header>
+
+
+    <!-- Bloquinho do produto -->
+    <div class="row text-center">
+
+        <div class="col-lg-3 col-md-6 mb-4" th:each="produto : ${produtos}">
+            <div class="card">
+
+                <img class="card-img-top" style="height: 200px; object-fit: cover" th:src="${produto.getPath_img()}">
+
+                <div class="card-body">
+                    <h4 class="card-title"  style="height: 30%" th:text="${produto.getNome()}"> Titulo do Produto </h4>
+                    <p class="card-text" style="height: 55px" th:text="${produto.getDescricao()}"> Descrição do Produto </p>
+                    <p class="card-text preco" th:text="'R$: '  + ${#numbers.formatDecimal(produto.getPreco(), 0, 'DEFAULT', 2, 'DEFAULT')}"> Preço do Produto </p>
+                    <a href="#" class="btn btn-primary" style="width: 80%; margin-bottom: 10px">Ver detalhes</a>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+</body>
+
+
+<style th:inline="text">
+
+    .jumbotron {
+        position: relative;
+        overflow: hidden;
+    }
+    .jumbotron .container {
+        position: relative;
+        z-index: 2;
+        color: #ffffff;
+    }
+
+    .text-principal{
+        font-weight: bold;
+    }
+    .jumbotron:after {
+
+        content:"";
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-size: cover;
+        background-repeat: no-repeat;
+        filter: brightness(50%) blur(5.5px);
+        transform: scale(1.1);
+        background-image: url([[@{(${principal.getPath_img()})}]]);
+
+    }
+
+</style>
+
+</html>
