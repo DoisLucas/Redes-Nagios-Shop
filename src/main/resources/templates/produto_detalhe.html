@@ -58,45 +58,30 @@
     <!-- Produto Principal -->
     <header class="jumbotron my-4">
         <div class="container">
-        <h1 class="display-3 text-principal produto-texto-detalhe" th:text="${principal.getNome()}"> A Warm Welcome!</h1>
-        <p class="lead" style="font-weight: bold" th:text="${principal.getDescricao()}">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo
-            aspernatur vitae fugiat numquam repellat.</p>
-        <a th:href="@{/produto/{id}(id=${principal.getId()})}"  style="font-weight: bold" class="btn btn-light btn-lg">Ver detalhes</a>
+            <h1 class="display-3 text-principal produto-texto-detalhe" th:text="${produto.getNome()}"> A Warm Welcome!</h1>
+            <p class="lead " style="font-weight: bold" th:text="${produto.getDescricao()}">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo
+                aspernatur vitae fugiat numquam repellat.</p>
+
+            <p class="" style="color: white; text-align: justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris gravida eros ac est commodo, ut tempus tellus hendrerit. Quisque sagittis malesuada mauris a luctus. Nullam molestie sit amet sapien sed lacinia. Vivamus lobortis ultrices nibh nec faucibus. Praesent consectetur congue sapien, vel rutrum mauris fringilla vel. Nulla lorem magna, dapibus et mi id, pellentesque tincidunt metus. Morbi at viverra erat. Nam tempus congue orci at mollis. Integer interdum elit urna, at aliquam turpis tristique sed. Quisque tincidunt vulputate lacus, id eleifend justo eleifend quis. Ut vitae lectus at turpis congue suscipit. Vestibulum rutrum leo eget augue sollicitudin porta. Donec a tempus justo, eu dictum ex. Vivamus sollicitudin felis diam, et consectetur massa luctus eu. Praesent sagittis laoreet augue, at iaculis felis auctor vel. Nam ac odio egestas, porttitor justo quis, iaculis urna.
+            </p>
+            <h1 class="preco-detalhe" th:text="'R$: '  + ${#numbers.formatDecimal(produto.getPreco(), 0, 'DEFAULT', 2, 'DEFAULT')}"></h1>
+            <button type="button" class="btn btn-light btn-lg" style="font-weight: bold; width: 150px">Comprar</button>
         </div>
+
     </header>
 
-
-    <!-- Bloquinho do produto -->
-    <div class="row text-center">
-
-        <div class="col-lg-3 col-md-6 mb-4" th:each="produto : ${produtos}">
-            <div class="card">
-
-                <img class="card-img-top" style="height: 200px; object-fit: cover" th:src="${produto.getPath_img()}">
-
-                <div class="card-body">
-                    <h4 class="card-title"  style="height: 30%" th:text="${produto.getNome()}"> Titulo do Produto </h4>
-                    <p class="card-text" th:text="${produto.getDescricao()}"> Descrição do Produto </p>
-                    <p class="card-text preco" th:text="'R$: '  + ${#numbers.formatDecimal(produto.getPreco(), 0, 'DEFAULT', 2, 'DEFAULT')}"> Preço do Produto </p>
-                    <a th:href="@{/produto/{id}(id=${produto.getId()})}" class="btn btn-dark" style="width: 80%; font-weight: 600; margin-bottom: 10px">Ver detalhes</a>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
 
 </div>
 
 </body>
-
 
 <style th:inline="text">
 
     .jumbotron {
         position: relative;
         overflow: hidden;
+        /*min-height: 85vh;*/
     }
     .jumbotron .container {
         position: relative;
@@ -107,6 +92,7 @@
     .text-principal{
         font-weight: bold;
     }
+
     .jumbotron:after {
 
         content:"";
@@ -118,9 +104,9 @@
         bottom: 0;
         background-size: cover;
         background-repeat: no-repeat;
-        filter: brightness(70%) blur(5.5px);
+        filter: brightness(50%) blur(5.5px);
         transform: scale(1.1);
-        background-image: url([[@{(${principal.getPath_img()})}]]);
+        background-image: url([[@{(${produto.getPath_img()})}]]);
 
     }
 
