@@ -1,6 +1,6 @@
 # Redes-Naggios-Shop
 
-**Ferramenta de monitoramento que enviará alertas via email e SMS ao detectar falhas na redefd geração de relatórios de erros e monitoração do fluxo de conexões.**
+**Ferramenta de monitoramento que enviará alertas via email ao detectar falhas na redefd geração de relatórios de erros e monitoração do fluxo de conexões.**
 
 **Nessa documentação iremos mostrar passo a passo da execução dos seguintes tópicos:**
 
