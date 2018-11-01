@@ -7,11 +7,11 @@
 - **Instalação do Ubuntu 16.04 LTS**
 - **Instalação e configuração do Nagios**
 - **Monitoramento dos dispositivos da rede**
-- **Alertas de erros via e-mail e SMS**
+- **Alertas de erros via e-mail**
 - [ ] **Instalação do Ubuntu 16.04 LTS**
 - [ ] **Instalação e configuração do Nagios**
 - [ ] **Monitoramento dos dispositivos da rede**
-- [ ] **Alertas de erros via e-mail e SMS**
+- [ ] **Alertas de erros via e-mail**
 - [ ] **Adicionais**
 	- [ ] **Instalação e configuração do banco de dados PostgreSQL**
 	- [X]  **Habilitar o projeto Spring (Java)**
