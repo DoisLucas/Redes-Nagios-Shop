@@ -22,13 +22,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eleifend, lorem quis
 ### SELinux
 Este guia leva em cosideração que o SELinux está desativado, pois esta é a configuração padrão do Ubuntu. Se deseja saber se está instalado, execute o comando:
 ```bash
-    sudo dpkg -l selinux*    
+sudo dpkg -l selinux*    
 ```
 ### Pré-requisitos
 Execute o comando a seguir para atualizar os pacotes instalados e instalar os pré-requisitos:
 ```bash
-    sudo apt-get update
-    sudo apt-get install -y autoconf gcc libc6 make wget unzip apache2 php libapache2-mod-php7.0 libgd2-xpm-dev
+sudo apt-get update
+sudo apt-get install -y autoconf gcc libc6 make wget unzip apache2 php libapache2-mod-php7.0 libgd2-xpm-dev
 ```
 ### Baixe o arquivo fonte
 Execute os passos  a seguir criar a pasta onde o Nagios vai ser instalado, navegar para dita pasta, baixar o arquivo compactado do Nagios e extrai os arquivos compactados
@@ -100,7 +100,7 @@ sudo systemctl apache2.service restart
 sudo systemctl nagios.service start
 ```
 
-Agora você pode acessar o nagios clicando (aqui)[localhost/nagios] ou digitando localhost/nagios no seu navegador
+Agora você pode acessar o nagios clicando [aqui](http://localhost/nagios) ou digitando localhost/nagios no seu navegador
 
 ## Monitoramento
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eleifend, lorem quis convallis semper, est tellus dignissim diam, in vulputate mauris metus non justo. Nulla tincidunt orci lacus, non consequat nibh pretium ac. Fusce ut purus eget nibh feugiat vehicula quis sit amet elit. Praesent quis auctor justo. Curabitur vitae nunc ut ligula dignissim lacinia a id lectus. Nullam posuere sed elit eget gravida. Nunc non mattis odio. Vestibulum tempor tincidunt lorem ut vehicula. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis condimentum leo sit amet ante tincidunt pharetra. Vivamus eu tortor molestie, porta libero et, facilisis felis. Ut pulvinar odio arcu, fringilla aliquam ligula malesuada eget. Fusce ante lorem, iaculis id aliquam at, maximus sed magna. Nulla facilisi.
@@ -109,67 +109,67 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eleifend, lorem quis
 
 ## Adicionais
 
-> ### PostgreSQL
+## PostgreSQL
 
-- ### Instalação
+### Instalação
 
-	Os repositórios padrão do Ubuntu contém os pacotes do Postgres, assim podemos instalá-lo facilmente utilizando o sistema de pacotes `apt`
-	```bash 
-		$ sudo apt-get update
-		$ sudo apt-get install postgresql postgresql-contrib
-	```
+Os repositórios padrão do Ubuntu contém os pacotes do Postgres, assim podemos instalá-lo facilmente utilizando o sistema de pacotes `apt`
+```bash 
+$ sudo apt-get update
+$ sudo apt-get install postgresql postgresql-contrib
+```
 
-	O procedimento de instalação criou um usuário chamado  `postgres`  que é associado com o role padrão do Postgres. Para usar o Postgres, podemos fazer login nessa conta.
+O procedimento de instalação criou um usuário chamado  `postgres`  que é associado com o role padrão do Postgres. Para usar o Postgres, podemos fazer login nessa conta.
 
-	Alterne para a conta  `postgres`  no seu servidor digitando:
-	```bash 
-		$ sudo -i -u postgres
-	```
+Alterne para a conta  `postgres`  no seu servidor digitando:
+```bash 
+$ sudo -i -u postgres
+```
 
-	Agora você pode acessar o prompt do Postgres imediatamente digitando:
+Agora você pode acessar o prompt do Postgres imediatamente digitando:
+```bash 
+$ psql
+```
+### Configuração:
 
-	```bash 
-		$ psql
-	```
--  ### Configuração:
-	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eleifend, lorem quis convallis semper, est tellus dignissim diam, in vulputate mauris metus non justo. 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eleifend, lorem quis convallis semper, est tellus dignissim diam, in vulputate mauris metus non justo. 
 
+## Projeto Spring
 
-> ### Projeto Spring
-- ### Instalação do Java JDK 8 no Ubuntu:
-	- Primeiro é necessario adicionar o PPA (Personal Package Archives) da Oracle e logo em seguida atualizar o repositorio de pacotes e realizar a instalação :
-	```bash 
-		$ sudo add-apt-repository ppa:webupd8team/java
-		$ sudo apt-get update
-		$ sudo apt-get install oracle-java8-installer
-		$ java -version
-	```
-	 Se tudo ocorrer bem ao executar o comando será mostrada a versão do Maven instalada:
+### Instalação do Java JDK 8 no Ubuntu:
+Primeiro é necessario adicionar o PPA (Personal Package Archives) da Oracle e logo em seguida atualizar o repositorio de pacotes e realizar a instalação :
+```bash 
+$ sudo add-apt-repository ppa:webupd8team/java
+$ sudo apt-get update
+$ sudo apt-get install oracle-java8-installer
+$ java -version
+```
+Se tudo ocorrer bem ao executar o comando será mostrada a versão do Maven instalada:
 	 
--  ### Instalação Maven
-	-  Primeiro é necessario pegar o pacote do Maven disponivel com o comando abaixo:
-	 ```bash 
-		 $ sudo apt-cache search maven
-	``` 
-	-  Logo em seguida executar o comando abaixo para instalar a ultima versão do Apache Maven e apos a execução. 
+### Instalação Maven
+Primeiro é necessario pegar o pacote do Maven disponivel com o comando abaixo:
+```bash 
+$ sudo apt-cache search maven
+``` 
+Logo em seguida executar o comando abaixo para instalar a ultima versão do Apache Maven e apos a execução. 
 
-	 ```bash 
-		 $ sudo apt-get install maven
-	```
+ ```bash 
+$ sudo apt-get install maven
+```
 		 
-	- Se tudo ocorrer bem ao executar o comando abaixo será mostrada a versão do Maven instalada: 
-	```bash 
-		$ mvn -version	
-	```
+Se tudo ocorrer bem ao executar o comando abaixo será mostrada a versão do Maven instalada: 
+```bash 
+$ mvn -version	
+```
 
--  ### Execução do Projeto
+### Execução do Projeto
 		
-	O projeto deverá ser baixado do nosso repositorio do [Github](https://github.com/DoisLucas/Redes-Nagios-Shop)  
+O projeto deverá ser baixado do nosso repositorio do [Github](https://github.com/DoisLucas/Redes-Nagios-Shop)  
 	
-	Com o terminal aberto é necessario navegar até a pasta do projeto que foi baixado e executar o seguinte comando para subir a aplicação:
+Com o terminal aberto é necessario navegar até a pasta do projeto que foi baixado e executar o seguinte comando para subir a aplicação:
 
-	```bash 
-		$ mvn spring-boot:run	
-	```
+```bash 
+$ mvn spring-boot:run	
+```
 	
 	
