@@ -99,7 +99,111 @@ sudo systemctl nagios.service start
 Agora você pode acessar o nagios clicando [aqui](http://localhost/nagios) ou digitando localhost/nagios no seu navegador
 
 ## Monitoramento
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eleifend, lorem quis convallis semper, est tellus dignissim diam, in vulputate mauris metus non justo. Nulla tincidunt orci lacus, non consequat nibh pretium ac.
+Após a instalação completa do nagios é necessario preparar a estrutura dos arquivos que iremos utilizar:
+
+```bash
+$ cd /usr/local/nagios/etc
+$ sudo mkdir network // Pasta onde colocaremos os hosts de rede que iremos mapear;
+$ sudo mkdir windows // Pasta onde colocaremos os hosts windowns.
+$ sudo mkdir linux   // Pasta onde colocaremos os hosts linux.
+```
+Em seguida é necessario criar um template onde contem o padrão de configuração de cada tipo de hosts (Windowns, Linux ou Rede Network):
+
+```bash
+$ cd /usr/local/nagios/etc
+$ sudo vi templateNP.cfg
+```
+E colar o seguinte script no templateNP.cfg:
+
+```
+
+### Template "SERVICOS" de Rede e ICMP 
+
+define service{ 	
+	name 					TemplateService 
+	active_checks_enabled 			1 
+	notifications_enabled 			1 
+	passive_checks_enabled 			0 
+	retain_status_information 		1 
+	is_volatile 				0 
+	max_check_attempts 			3 
+	check_interval 				5 
+	normal_check_interval 			5 
+	retry_check_interval 			5 
+	check_period 				24x7 
+	notification_interval 			0 
+	notification_period 			24x7 ; 24hrs / 7 dias da semana
+	notification_options 			u,c,r ; U = Unknown C = Critical R = Recovery
+	register 				0 
+} 
+
+#### Template "HOST" Windows 
+
+
+define host{ 
+	name 					TemplateHostWindows 
+	max_check_attempts 			3 
+	check_interval 				5 
+	retry_check_interval 			5 
+	active_checks_enabled 			1 
+	passive_checks_enabled 			0 
+	check_period 				24x7 
+	retain_status_information 		1 
+	notification_interval 			60 ; Tempo de intervalo entre o envio do alerta
+	notification_period 			24x7 
+	notification_options 			d,u,r ; D = Down U = Unknowm R = Recovery
+	register 				0 
+} 
+
+### Template "HOST" Linux 
+
+define host{ 
+	name 					TemplateHostLinux 
+	check_command 				check-host-alive
+	max_check_attempts 			3 
+	check_interval 				5 
+	retry_check_interval 			5 
+	active_checks_enabled 			1 
+	check_period 				24x7 
+	retain_status_information 		1 
+	notification_interval 			60 
+	notification_period 			24x7 
+	notification_options 			d,u,r 
+} 
+
+### Template "HOST" Rede 
+
+define host{ 
+	name 					TemplateHostRede 
+	check_command 				check-host-alive 
+	max_check_attempts 			2 
+	check_interval 				5 
+	retry_check_interval 			5 
+	active_checks_enabled 			1 
+	check_period 				24x7 
+	retain_status_information 		1 
+	notification_interval 			60 
+	notification_period 			24x7 
+	notification_options 			d,u,r 
+} 
+
+# 'check_tcp' command definition 
+define command{ 
+	command_name check_tcpNP 
+	command_line $USER1$/check_tcp -H $HOSTADDRESS$ -p $ARG1$ -w $ARG2$ -c $ARG3$
+}
+```
+
+Após criarmos as pastas e arquivos citado acima, é necessario referencia-los no arquivo principal do nagios, o nagios.cfg, adicionando as linhas abaixo apos a linha 18 do arquivo:
+
+```
+cfg_dir=/usr/local/nagios/etc/linux
+cfg_dir=/usr/local/nagios/etc/windows
+cfg_dir=/usr/local/nagios/etc/network
+cfg_file=/usr/local/nagios/etc/templatesNP.cfg
+
+```
+
 
 ## Alertas
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eleifend, lorem quis convallis semper, est tellus dignissim diam, in vulputate mauris metus non justo. Nulla tincidunt orci lacus, non consequat nibh pretium ac.
@@ -131,7 +235,9 @@ $ psql
 
 Apos a instalação é necessario criar um banco de dados chamado "ecommerce" e alterar a senha do usuario postgres para "redes123" com os seguintes comandos:
 ```bash 
-$ psql
+$ psql -U postgres
+$ create database ecommerce
+$ alter user postgres with encrypted password 'redes123'; 
 ```
 
 ## Projeto Spring
