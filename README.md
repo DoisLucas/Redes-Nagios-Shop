@@ -86,14 +86,18 @@ sudo ufw reload
 ### Criação do usuário admin
 Este comando irá criar um usuário Apache para o acesso ao Nagios. Ele criará o usuário chamado *nagiosadmin* e pedirá a inserção da senha
 ```bash
+
 sudo htpasswd -c /usr/local/nagios/etc/htpasswd.users nagiosadmin 
+
 ```
 
 ### Inicialização do Apache e do Daemon
 Estes comando irão inicializar o Apache e o Daemon
 ```bash
+
 sudo systemctl apache2.service restart
 sudo systemctl nagios.service start
+
 ```
 
 Agora você pode acessar o nagios clicando [aqui](http://localhost/nagios) ou digitando localhost/nagios no seu navegador
@@ -107,16 +111,17 @@ $ sudo mkdir network // Pasta onde colocaremos os hosts de rede que iremos mapea
 $ sudo mkdir windows // Pasta onde colocaremos os hosts windowns.
 $ sudo mkdir linux   // Pasta onde colocaremos os hosts linux.
 ```
-Em seguida é necessario criar um template onde contem o padrão de configuração de cada tipo de hosts (Windowns, Linux ou Rede Network):
+Em seguida é necessario criar um template onde contém o padrão de configuração para cada tipo de host (Windown, Linux ou Rede Network):
 
 ```bash
+
 $ cd /usr/local/nagios/etc
 $ sudo vi templateNP.cfg
+
 ```
 E colar o seguinte script no templateNP.cfg:
 
 ```
-
 ### Template "SERVICOS" de Rede e ICMP 
 
 define service{ 	
@@ -192,9 +197,10 @@ define command{
 	command_name check_tcpNP 
 	command_line $USER1$/check_tcp -H $HOSTADDRESS$ -p $ARG1$ -w $ARG2$ -c $ARG3$
 }
+
 ```
 
-Após criarmos as pastas e arquivos citado acima, é necessario referencia-los no arquivo principal do nagios, o nagios.cfg, adicionando as linhas abaixo apos a linha 18 do arquivo:
+Após criarmos as pastas e o arquivo citado acima, é necessário referência-los no arquivo principal do nagios, o nagios.cfg, colando o comando abaixo logo após a linha 18 do arquivo:
 
 ```
 cfg_dir=/usr/local/nagios/etc/linux
@@ -204,6 +210,58 @@ cfg_file=/usr/local/nagios/etc/templatesNP.cfg
 
 ```
 
+Agora iremos testar o funcionamento do nagios mapeando um site, nesse caso o site www.google.com, para isso criaremos um arquivo cfg dentro da pasta network que criamos anteriormente
+
+```
+$ cd /usr/local/nagios/etc
+$ sudo vi google_site.cfg
+
+```
+
+E colocaremos o seguinte script dentro do arquivo recém criado:
+
+```
+
+### Definindo o host
+
+define host{ 
+	host_name Google_Site 
+	use TemplateHostRede ; Referenciando ao template que criamos acima 
+	alias Site do Terra ; Apelido
+	address www.terra.com ; Endereço/IP
+	contact_groups admins ; Padrão Nagios
+} 
+
+
+### Definindo os serviços que iremos monitorar
+
+define service{ 
+	use TemplateService 
+	host_name Google_Site ; Deve ser o mesmo nome do host acima
+	service_description PING-Disponibilidade ; Descrição do Serviço a ser monitorado
+	check_command check_ping!3000.0,80%!5000.0,100%!; Plugin e Parametros;
+	contact_groups admins 
+}
+
+define service{ 
+	use TemplateService 
+	host_name Site_Terra
+	service_description HTTP
+	check_command check_tcpNP!80!1!2! 
+	contact_groups admins 
+}
+
+
+```
+Com isso adicionamos um host com 2 serviços que iremos mapear, para visualizar o host é necessario reiniciar o serviço do nagios e logo em seguida acessar o portal do nagios clicando [aqui](http://localhost/nagios) ou digitando localhost/nagios no seu navegador e clicar em hosts.
+
+Comando para reiniciar o servico do nagios:
+
+```bash
+
+$ sudo systemctl nagios.service restart
+
+```
 
 ## Alertas
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eleifend, lorem quis convallis semper, est tellus dignissim diam, in vulputate mauris metus non justo. Nulla tincidunt orci lacus, non consequat nibh pretium ac.
