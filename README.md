@@ -4,16 +4,19 @@
 
 **Nessa documentação iremos mostrar passo a passo da execução dos seguintes tópicos:**
 
-- [ ] **Instalação do Ubuntu 16.04 LTS**
 - [X] **Instalação e configuração do Nagios**
-- [ ] **Monitoramento dos dispositivos da rede**
+- [X] **Monitoramento dos dispositivos da rede**
 - [ ] **Alertas de erros via e-mail**
 - [X] **Adicionais**
 	- [X] **Instalação e configuração do banco de dados PostgreSQL**
 	- [X]  **Habilitar o projeto Spring (Java)**
 
-## Ubuntu
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eleifend, lorem quis convallis semper, est tellus dignissim diam, in vulputate mauris metus non justo. Nulla tincidunt orci lacus, non consequat nibh pretium ac. Fusce ut purus eget nibh feugiat vehicula quis sit amet elit. Praesent quis auctor justo. Curabitur vitae nunc ut ligula dignissim lacinia a id lectus. Nullam posuere sed elit eget gravida. Nunc non mattis odio. Vestibulum tempor tincidunt lorem ut vehicula. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis condimentum leo sit amet ante tincidunt pharetra. Vivamus eu tortor molestie, porta libero et, facilisis felis. Ut pulvinar odio arcu, fringilla aliquam ligula malesuada eget. Fusce ante lorem, iaculis id aliquam at, maximus sed magna. Nulla facilisi.
+## Pré requisitos:
+Para seguir esta documentação é necessario possuir o Ubuntu 16.04 LTS instalado, seja em uma maquina fisica ou em uma maquina virtual como o Oracle VM Virtual Box.
+
+Links Úteis: 
+[Como instalar o Ubuntu na Virtual Box](https://www.techtudo.com.br/dicas-e-tutoriais/noticia/2016/04/como-instalar-o-ubuntu-com-o-virtualbox.html)
+
 ## Nagios
 ### SELinux
 Este guia leva em cosideração que o SELinux está desativado, pois esta é a configuração padrão do Ubuntu. Se deseja saber se está instalado, execute o comando:
@@ -28,6 +31,7 @@ sudo apt-get install -y autoconf gcc libc6 make wget unzip apache2 php libapache
 ```
 ### Baixe o arquivo fonte
 Execute os passos  a seguir criar a pasta onde o Nagios vai ser instalado, navegar para dita pasta, baixar o arquivo compactado do Nagios e extrai os arquivos compactados
+
 ```bash
 mkdir /home/{user}/nagios 
 cd /home/{user}/nagios 
@@ -100,6 +104,19 @@ sudo systemctl nagios.service start
 
 ```
 
+### Instalação dos plugins básicos
+
+```bash
+
+$ cd /usr/local/src
+$ sudo wget https://nagios-plugins.org/download/nagios-plugins-2.2.1.tar.gz#_ga=2.103818373.400631121.1541798172-414053869.1541798172
+$ sudo tar zxvf nagios-plugins-2.2.1.tar.gz
+$ sudo ./configure --with-nagios-user=nagios --with-nagios-group=nagios
+$ sudo make
+$ sudo make install
+
+```
+
 Agora você pode acessar o nagios clicando [aqui](http://localhost/nagios) ou digitando localhost/nagios no seu navegador
 
 ## Monitoramento
@@ -107,7 +124,7 @@ Após a instalação completa do nagios é necessario preparar a estrutura dos a
 
 ```bash
 $ cd /usr/local/nagios/etc
-$ sudo mkdir network // Pasta onde colocaremos os hosts de rede que iremos mapear;
+$ sudo mkdir network // Pasta onde colocaremos os hosts de rede que iremos mapear.
 $ sudo mkdir windows // Pasta onde colocaremos os hosts windowns.
 $ sudo mkdir linux   // Pasta onde colocaremos os hosts linux.
 ```
