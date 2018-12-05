@@ -7,6 +7,7 @@
 - **Instalação e configuração do Nagios**
 -  **Monitoramento dos dispositivos da rede**
 - **Alertas de erros via e-mail**
+- **Nagiosgraph**
 - **Adicionais**
     - **Instalação e configuração do banco de dados PostgreSQL**
     - **Habilitar o projeto Spring (Java)**
@@ -388,7 +389,7 @@ E mude o valor de email para o seu nome de usuario do Sendgrid.
 
 Para finalizar teste se as suas configurações estão corretas com o comando:
 
-```bash
+```
 sudo /usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
 ```
 
@@ -397,6 +398,136 @@ E reinicie o Nagios com o comando:
 ```bash
 sudo systemctl restart nagios.service
 ```
+
+## Nagiosgraph
+
+### Instalação do nagiosgraph
+
+Para baixar os arquivos necessários clique [aqui](https://sourceforge.net/projects/nagiosgraph/files/nagiosgraph/) para acessar a página do `nagiosgraph`. Em seguida clique em `Download Latest Version`para baixar os arquivos compactados. 
+
+![Pagina sourceforge nagiosgraph](imagens/download_nagiosgraph.png)
+
+Execute o comando abaixo para extrair os arquivos do nagiosgraph e mudar o diretório atual do terminal
+
+```bash
+tar -zxf nagiosgraph-1.5.2.tar.gz
+cd nagiosgraph-1.5.2
+```
+
+O seguinte como irá checar se todas as dependências já estão instaladas.
+
+```bash
+./install.pl --check-prereq
+```
+
+O comando irá lançar uma saída neste formato
+
+```bash
+checking required PERL modules
+  Carp...1.42
+  CGI...4.38
+  Data::Dumper...2.167
+  Digest::MD5...2.55
+  File::Basename...2.85
+  File::Find...1.34
+  MIME::Base64...3.15
+  POSIX...1.76
+  RRDs...1.5001
+  Time::HiRes...1.9741
+checking optional PERL modules
+  GD...2.69
+  Nagios::Config...36
+checking nagios installation
+  found nagios exectuable at /usr/local/nagios/bin/nagios
+checking web server installation
+  found apache executable at /usr/sbin/apache2
+  found apache init script at /etc/init.d/apache2
+```
+
+Caso as dependências RRDs, GD e Nagios::Config estejam faltando execute os seguintes comandos
+```bash
+sudo apt-get install librrds-perl libgd-gd2-perl
+perl -MCPAN -e shell
+install Nagios::Config
+exit
+```
+
+Se todas as dependencias já estiverem instaladas execute o comando abaixo para realizar a instalação:
+```bash
+./install.pl --layout standalone --prefix /usr/local/nagiosgraph
+```
+
+Serão apresentadas várias opções para configuração do `nagiosgraph` durante a instalação mas não é preciso realizar alterações nos valores padrões, com exceção das seguintes opções
+
+```bash
+Modify the Nagios configuration? [n] y
+Path of Nagios configuration file? /usr/local/nagios/etc/nagios.cfg
+Path of Nagios commands file? /usr/local/nagios/etc/objects/commands.cfg 
+Modify the Apache configuration? [n] y
+Path of Apache configuration directory? /etc/apache2
+```
+
+Agora deve-se reiniciar o Nagios e o Apache
+
+### Configurando o Nagios com o nagiosgraph
+
+As seguintes configurações devem ser adicionadas ao arquivo `nagios.cfg` na pasta `/usr/local/nagios/etc`
+
+```
+process_performance_data=1
+service_perfdata_file=/tmp/perfdata.log
+service_perfdata_file_template=$LASTSERVICECHECK$||$HOSTNAME$||$SERVICEDESC$||$SERVICEOUTPUT$||$SERVICEPERFDATA$
+service_perfdata_file_mode=a
+service_perfdata_file_processing_interval=15
+service_perfdata_file_processing_command=process-service-perfdata-for-nagiosgraph
+```
+
+Também deve-se adicionar o seguinte comando no arquivo de comandos do Nagios, localizado em `/usr/local/nagios/etc/objects/commands.cfg`
+
+```
+define command {
+  command_name process-service-perfdata-for-nagiosgraph
+  command_line /usr/local/nagiosgraph/bin/insert.pl
+}
+```
+
+Para finalizar a configuração modifique o arquivo de configuração do Apache inserindo a seguinte linha no final do arquivo
+
+```
+Include /usr/local/nagiosgraph/etc/nagiosgraph-apache.conf
+```
+
+O arquivo de configuração do Apache está localizado `/etc/apache2/apache2.conf`
+
+### Adicionando o serviço do nagiosgraph
+
+Primeiro deve-se criar o serviço do `nagiosgraph` adicionando as definições abaixo no arquivo `/usr/local/nagios/etc/objects/templates.cfg`
+
+```
+define service {
+    name nagiosgraph
+    action_url /nagiosgraph/cgi-bin/show.cgi?host=$HOSTNAME$&service=$SERVICEDESC$
+    register 0
+}
+```
+
+Agora já é possivel utilizar o `nagiosgraph` para obter os gráficos. Basta adicionar o nagiosgraph no campo `use`
+
+```
+define service {
+    use generic-service,nagiosgraph
+    host_name Arthur_Cell
+    service_description PING
+    check_command check_ping!100,10%!2000,20%
+}
+```
+
+Isto pode ser feito para todos os serviços em que se deseja obter gráficos baseados nos dados obtidos.
+
+Segue alguns dos gráficos obtidos
+
+![nagiosgraph1](imagens/nagiosgraph1.png)
+![nagiosgraph2](imagens/nagiosgraph2.png)
 
 ## Adicionais
 
